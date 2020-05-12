@@ -40,8 +40,8 @@ export default class AddTodo extends HTMLElement {
           status: false,
         };
 
-        document.querySelector("todo-app").todoItem = todoItem;
-        document.querySelector("todo-app").todo = "added";
+        this.dispatchEvent(new CustomEvent("onAdd", { detail: todoItem }));
+
         //When entre is clicked pass data to todo
         this.$input.value = "";
       }

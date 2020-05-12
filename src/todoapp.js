@@ -18,6 +18,7 @@ templateTodoApp.innerHTML = `
         }
     </style>
     <section>
+    <add-todo></add-todo>
         <ul id="todo-list"></ul>
     </section>`;
 
@@ -69,6 +70,13 @@ export default class TodoApp extends HTMLElement {
     this._todoList.forEach((todo) => {
       this._render(todo);
     });
+
+    const _addTodoElem = this._root.querySelector("add-todo");
+    _addTodoElem.addEventListener("onAdd", this._addTodo.bind(this));
+  }
+
+  _addTodo(e) {
+    this._render(e.detail);
   }
 
   _render(todo) {
