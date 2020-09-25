@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   mode: "development",
-  entry: "./src/index.js",
+  entry: "./src/todoapp.js",
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js",

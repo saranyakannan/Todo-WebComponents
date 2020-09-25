@@ -1,3 +1,6 @@
+import AddTodo from "./addtodo";
+import EachTodoItem from "./eachtodo";
+
 const templateTodoApp = document.createElement("template");
 templateTodoApp.innerHTML = `
     <style>
@@ -19,7 +22,7 @@ templateTodoApp.innerHTML = `
     </style>
     <section>
     <add-todo></add-todo>
-        <ul id="todo-list"></ul>
+    <ul id="todo-list"></ul>
     </section>`;
 
 export default class TodoApp extends HTMLElement {
@@ -45,49 +48,37 @@ export default class TodoApp extends HTMLElement {
     ];
   }
 
-  get todo() {
-    return this.getAttribute("todo");
-  }
-
-  set todo(val) {
-    if (val) this.setAttribute("todo", val);
-  }
-
-  static get observedAttributes() {
-    return ["todo"];
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === "todo") {
-      this._render(this.todoItem);
-    }
-  }
-
-  // removes the selected song
   connectedCallback() {
     this._root.appendChild(templateTodoApp.content.cloneNode(true));
+    this._renderEachTodoItem(this._todoList);
+    this._addTodoListener();
+  }
 
-    this._todoList.forEach((todo) => {
-      this._render(todo);
+  _renderEachTodoItem(todoList) {
+    console.log(todoList);
+    todoList.forEach((todo) => {
+      this._root
+        .querySelector("#todo-list")
+        .appendChild(document.createElement("each-todo-item"));
+
+      const $todoElement = this._root.querySelector("#todo-list").lastChild;
+
+      $todoElement._todo = todo;
+
+      $todoElement.setAttribute("name", todo.name);
+      $todoElement.setAttribute("status", todo.status);
     });
+  }
 
+  _addTodoListener() {
     const _addTodoElem = this._root.querySelector("add-todo");
     _addTodoElem.addEventListener("onAdd", this._addTodo.bind(this));
   }
 
   _addTodo(e) {
-    this._render(e.detail);
-  }
-
-  _render(todo) {
-    this._root
-      .querySelector("#todo-list")
-      .appendChild(document.createElement("each-todo-item"));
-
-    const $todoElement = this._root.querySelector("#todo-list").lastChild;
-
-    $todoElement.setAttribute("name", todo.name);
-    $todoElement.setAttribute("status", todo.status);
+    console.log("Comes here");
+    console.log(e.detail);
+    this._renderEachTodoItem(e.detail);
   }
 }
 

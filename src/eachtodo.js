@@ -72,25 +72,8 @@ export default class EachTodoItem extends HTMLElement {
     this._root = this.attachShadow({ mode: "open" });
   }
 
-  get name() {
-    return this.getAttribute("name");
-  }
-
-  set name(val) {
-    if (val) this.setAttribute("name", val);
-  }
-
-  get status() {
-    return this.getAttribute("status");
-  }
-
-  set status(val) {
-    if (val) this.setAttribute("status", val);
-  }
-
   connectedCallback() {
-    console.log("coneected callback");
-    this._root.appendChild(this._render(this.todoMap));
+    this._render();
     this._statusEvenHandler(this._root.querySelector("li.item"));
   }
 
@@ -113,16 +96,15 @@ export default class EachTodoItem extends HTMLElement {
     }
   }
 
-  _render(eachTodoItem) {
-    let todoItem = templateTodoItem.content.cloneNode(true);
-    return todoItem;
+  _render() {
+    this._root.appendChild(templateTodoItem.content.cloneNode(true));
   }
 
   _statusEvenHandler(elem) {
     elem.addEventListener("click", (e) => {
       this.setAttribute(
         "status",
-        this.getAttribute("status") === "true" ? "false" : "true"
+        this.getAttribute("status") === "done" ? "undone" : "done"
       );
     });
   }

@@ -29,23 +29,32 @@ export default class AddTodo extends HTMLElement {
 
   connectedCallback() {
     this._root.appendChild(addTodoTemplate.content.cloneNode(true));
+
+    this._bindKeyPress();
+  }
+
+  _bindKeyPress() {
     this.$input = this._root.querySelector("input");
 
-    this.$input.addEventListener("keypress", (e) => {
-      if (e.keyCode === 13) {
-        if (!e.target.value) return;
+    this.$input.addEventListener("keypress", this._addTodo.bind(this));
+  }
 
-        const todoItem = {
+  _addTodo(e) {
+    console.log(e);
+    if (e.keyCode === 13) {
+      if (!e.target.value) return;
+
+      const todoItem = [
+        {
           name: e.target.value,
           status: false,
-        };
+        },
+      ];
 
-        this.dispatchEvent(new CustomEvent("onAdd", { detail: todoItem }));
+      this._root.querySelector("input").value = "";
 
-        //When entre is clicked pass data to todo
-        this.$input.value = "";
-      }
-    });
+      this.dispatchEvent(new CustomEvent("onAdd", { detail: todoItem }));
+    }
   }
 }
 
